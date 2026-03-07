@@ -21,6 +21,10 @@ Once files are uploaded, the system evaluates:
 
 ---
 
+## Scenario
+
+https://github.com/krsnp5/make_usecases/blob/main/object_validation/UC1-3_OV_Submissions.png
+
 ## Use Cases
 
 ### 1. Document Readability and Completeness Check
