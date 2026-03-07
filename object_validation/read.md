@@ -1,6 +1,6 @@
-# Real Estate Due Diligence Checker (Make.com + Google Drive + Google Document AI + ClickUp)
+# Real Estate Due Diligence Checker (Make.com + Google Drive + Google Document AI + GHL)
 
-This project demonstrates a document intake and due diligence automation workflow built using **Make.com**, **Google Drive**, **Google Document AI**, **ClickUp**, and email automation.
+This project demonstrates a document intake and due diligence automation workflow built using **Make.com**, **Google Drive**, **Google Document AI**, **GHL**, and email automation.
 
 The goal of the system is to help a real estate team review client-submitted property documents faster by validating file quality, document completeness, and property fit before a human follow-up takes place.
 
@@ -30,7 +30,7 @@ When a client uploads documents to Google Drive, the system scans the files usin
 The system checks whether the submitted property matches predefined acquisition criteria. Invalid property types such as condos or commercial spaces are rejected, while restricted-property cases are escalated for management review.
 
 ### 3. Acquisition Routing and Client Communication
-If the documents are readable, complete, and the property meets business rules, the case is routed to the Acquisition Manager in ClickUp with a “To Call” status. The client also receives an acknowledgement email with the expected callback timeline.
+If the documents are readable, complete, and the property meets business rules, the case is routed to the Acquisition Manager in GHL with a “To Call” status. The client also receives an acknowledgement email with the expected callback timeline.
 
 ---
 
@@ -55,13 +55,13 @@ The workflow is designed to support checks such as:
 If uploaded files are unreadable or low quality:
 
 - assign task to **Lead Manager**
-- set ClickUp status to **For Review**
+- set GHL status to **For Review**
 
 ### B. Complete and Qualified Submission
 If documents are complete, readable, and the property passes the business rules:
 
 - assign task to **Acquisition Manager**
-- set ClickUp status to **To Call**
+- set GHL status to **To Call**
 - send acknowledgement email:
 
 > Thanks for submitting your documents. Our real estate team is reviewing them at the moment and will give you a call within 2–3 business days.
@@ -80,34 +80,34 @@ If the property fails core acquisition rules or matches a restricted special-cas
 
 ## Workflow Behavior
 
-Every time a client uploads a document into the designated Google Drive submission folder, the automation will automatically create a **ClickUp task** representing that submission.
+Every time a client uploads a document into the designated Google Drive submission folder, the automation will automatically create a **GHL task** representing that submission.
 
 This task becomes the central record for the case and will be updated as the automation performs validation checks.
 
-The workflow then evaluates the uploaded files and updates the ClickUp task accordingly based on the validation results.
+The workflow then evaluates the uploaded files and updates the GHL task accordingly based on the validation results.
 
 ---
 
 ## Task Routing Logic
 
-Once a submission is detected and a ClickUp task is created, the system evaluates the uploaded documents and applies the following logic:
+Once a submission is detected and a GHL task is created, the system evaluates the uploaded documents and applies the following logic:
 
 ### Illegible Files
 If the uploaded documents are unreadable or too low quality for automated processing:
 
-- ClickUp task is assigned to **Lead Manager**
+- GHL task is assigned to **Lead Manager**
 - Status is set to **For Review**
 
 ### Incomplete Submission
 If required documents are missing:
 
 - Client receives an automated email requesting the missing files
-- ClickUp task status may be set to **Missing Documents**
+- GHL task status may be set to **Missing Documents**
 
 ### Qualified Submission
 If the documents are readable, complete, and the property meets acquisition criteria:
 
-- ClickUp task is assigned to **Acquisition Manager**
+- GHL task is assigned to **Acquisition Manager**
 - Status is set to **To Call**
 - Client receives a confirmation email:
 
@@ -116,7 +116,7 @@ If the documents are readable, complete, and the property meets acquisition crit
 ### Rejected or Escalated Property
 If the property fails acquisition criteria (for example property value below €200,000 or disallowed property types):
 
-- the ClickUp task is either **rejected** automatically or
+- the GHL task is either **rejected** automatically or
 - **escalated to management** for review
 
 ## Disclaimer
