@@ -13,7 +13,7 @@ The workflow uses AI translation and automation to bridge the communication gap 
 The automation consists of **three primary use cases**:
 
 1. Use Case 1: Inbound Ticket Translation
-Scenario: 
+Scenario: https://github.com/krsnp5/make_usecases/blob/main/multilingual/UC1_Inbound_Ticket_Translation.png
 Customer messages written in any language are automatically detected and translated into German for the support team. The original language is also stored on the ticket so future responses can be translated back to the customer's native language.
 
 2. Use Case 2: Automated SLA Response
