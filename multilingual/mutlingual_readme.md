@@ -21,7 +21,8 @@ Scenario: https://github.com/krsnp5/make_usecases/blob/main/multilingual/UC2_Aut
 When a new customer message is received, the system automatically sends an acknowledgement in the customer's original language confirming receipt of the request and expected response time. Safeguards ensure the SLA message is only sent once per ticket.
 
 4. Use Case 3: Outbound Response Translation 
-Scenario:
+Scenario: 
+
 Support agents respond internally in German. The system automatically translates the reply into the customer's original language before sending it. This allows agents to work in one internal language while supporting customers globally.
 
 Together, these workflows create a **translation bridge** between customers and the internal support team.
