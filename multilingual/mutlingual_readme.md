@@ -17,13 +17,13 @@ Scenario: https://github.com/krsnp5/make_usecases/blob/main/multilingual/UC1_Inb
 
 Customer messages written in any language are automatically detected and translated into German for the support team. The original language is also stored on the ticket so future responses can be translated back to the customer's native language.
 
-3. Use Case 2: Automated SLA Response
+2. Use Case 2: Automated SLA Response
 Scenario: https://github.com/krsnp5/make_usecases/blob/main/multilingual/UC2_Automated_SLA_Response.png
 
 When a new customer message is received, the system automatically sends an acknowledgement in the customer's original language confirming receipt of the request and expected response time. Safeguards ensure the SLA message is only sent once per ticket.
 
-4. Use Case 3: Outbound Response Translation 
-Scenario: multilingual/UC3_Outbound_Message_Translation.png
+3. Use Case 3: Outbound Response Translation 
+Scenario: https://github.com/krsnp5/make_usecases/blob/main/multilingual/UC3_Outbound_Message_Translation.png
 
 Support agents respond internally in German. The system automatically translates the reply into the customer's original language before sending it. This allows agents to work in one internal language while supporting customers globally.
 
