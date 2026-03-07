@@ -25,6 +25,17 @@ When a new customer message is received, the system automatically sends an ackno
 3. Use Case 3: Outbound Response Translation 
 Scenario: https://github.com/krsnp5/make_usecases/blob/main/multilingual/UC3_Outbound_Message_Translation.png
 
+## Disclaimer
+
+The workflow presented in this project is a **simulated reconstruction of production-style automation** originally developed for companies and clients under **Non-Disclosure Agreements (NDAs)**.
+
+To respect those agreements, the implementation shown here does **not reflect the exact production systems, infrastructure, datasets, or configurations** used in the original environments.
+
+Instead, the scenarios in this repository recreate the **same architectural concepts and automation logic** using publicly available tools, sandbox environments, and mock data. Certain business rules, integrations, and technical details may differ from the original implementations to ensure that no confidential or proprietary information is disclosed.
+
+These examples are intended strictly for **portfolio and demonstration purposes**.
+
+
 Support agents respond internally in German. The system automatically translates the reply into the customer's original language before sending it. This allows agents to work in one internal language while supporting customers globally.
 
 Together, these workflows create a **translation bridge** between customers and the internal support team.
