@@ -1,4 +1,4 @@
-# ImmoScout24 Listing Intake Automation
+# REI Listing Intake Automation
 
 This project demonstrates a Python-based workflow for extracting publicly available real estate listing information and integrating it with an automation pipeline for lead qualification and CRM tracking.
 
