@@ -9,6 +9,8 @@ The system allowed a **German-speaking support team** to communicate with custom
 
 # Legacy Implementation (2025)
 
+Link: https://github.com/krsnp5/make_usecases/tree/main/multilingual/legacy_automation
+
 When the system was originally implemented, **Zammad did not yet have a native integration in Make.com**. Because of this limitation, most of the automation logic had to be implemented directly inside Make using webhooks, API calls, and routing logic.
 
 The automation relied on the **Zammad REST API accessed through the HTTP module** to read and update ticket data.
