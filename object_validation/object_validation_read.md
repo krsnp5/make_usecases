@@ -1,134 +1,224 @@
-# Real Estate Due Diligence Checker (Make.com + Google Drive + Google Document AI + GHL)
+# Real Estate Submission Validation Automation (Immotool)
 
-This project demonstrates a document intake and due diligence automation workflow built using **Make.com**, **Google Drive**, **Google Document AI**, **GHL**, and email automation.
+This project demonstrates an automated **real estate submission validation system** built using **Make.com**, **Google Drive**, **API-based document validation**, and **GoHighLevel (GHL)** as the CRM.
 
-The goal of the system is to help a real estate team review client-submitted property documents faster by validating file quality, document completeness, and property fit before a human follow-up takes place.
+The workflow automatically processes property submissions, validates uploaded documents, applies acquisition business rules, and routes qualified leads to the acquisition team.
 
-The workflow combines **document extraction**, **rule-based validation**, and **automated routing** to support a more efficient due diligence process.
-
----
-
-## System Overview
-
-The automation is designed around document submissions uploaded by clients into **Google Drive**.
-
-Once files are uploaded, the system evaluates:
-
-- whether the documents are readable
-- whether the required files are complete
-- whether the property fits the company's acquisition criteria
-- whether the case should be rejected, escalated, or routed for follow-up
+The system reduces manual document review and ensures that only valid property opportunities move forward in the acquisition pipeline.
 
 ---
 
-## Scenario
+# System Overview
 
-https://github.com/krsnp5/make_usecases/blob/main/object_validation/UC1-3_OV_Submissions.png
+The automation acts as an **intake and validation layer** between property sellers and the internal acquisition team.
 
-## Use Cases
+When a property owner submits documents, the system automatically:
 
-### 1. Document Readability and Completeness Check
-When a client uploads documents to Google Drive, the system scans the files using Google Document AI to assess readability and completeness. Illegible or incomplete submissions are flagged for manual review or follow-up.
+1. Detects new document submissions
+2. Extracts and analyzes property information
+3. Validates document completeness and readability
+4. Applies acquisition business rules
+5. Updates the CRM pipeline accordingly
+6. Triggers automated communications through GoHighLevel
 
-### 2. Real Estate Object Validation
-The system checks whether the submitted property matches predefined acquisition criteria. Invalid property types such as condos or commercial spaces are rejected, while restricted-property cases are escalated for management review.
-
-### 3. Acquisition Routing and Client Communication
-If the documents are readable, complete, and the property meets business rules, the case is routed to the Acquisition Manager in GHL with a “To Call” status. The client also receives an acknowledgement email with the expected callback timeline.
-
----
-
-## Validation Rules
-
-The workflow is designed to support checks such as:
-
-- required documents submitted
-- readable and legible files
-- single-family homes only
-- no condos
-- no commercial spaces
-- reject properties below **€200,000**
-- escalate properties that fall under restricted or special historical-era criteria
-- assign manual review if document quality is too poor for automated processing
+GoHighLevel serves as the **single system of record** for all leads, validation results, and pipeline stages.
 
 ---
 
-## Example Outcomes
+# Core Workflow
 
-### A. Illegible Files
-If uploaded files are unreadable or low quality:
+### 1. Submission Detection
 
-- assign task to **Lead Manager**
-- set GHL status to **For Review**
+The automation monitors a Google Drive submission folder.
 
-### B. Complete and Qualified Submission
-If documents are complete, readable, and the property passes the business rules:
+When a new file or folder is uploaded, the workflow begins processing the submission.
 
-- assign task to **Acquisition Manager**
-- set GHL status to **To Call**
-- send acknowledgement email:
+Example submission documents may include:
 
-> Thanks for submitting your documents. Our real estate team is reviewing them at the moment and will give you a call within 2–3 business days.
-
-### C. Incomplete Submission
-If required documents are missing:
-
-- send automatic email requesting missing files
-- optionally route the case for follow-up
-
-### D. Rejected or Escalated Property
-If the property fails core acquisition rules or matches a restricted special-case category:
-
-- reject automatically or
-- escalate to the appropriate manager for review
-
-## Workflow Behavior
-
-Every time a client uploads a document into the designated Google Drive submission folder, the automation will automatically create a **GHL task** representing that submission.
-
-This task becomes the central record for the case and will be updated as the automation performs validation checks.
-
-The workflow then evaluates the uploaded files and updates the GHL task accordingly based on the validation results.
+- property documents
+- energy certificates
+- floor plans
+- identification documents
+- supporting attachments
 
 ---
 
-## Task Routing Logic
+### 2. CRM Lead Creation
 
-Once a submission is detected and a GHL task is created, the system evaluates the uploaded documents and applies the following logic:
+Once a submission is detected, the automation creates or updates the lead inside **GoHighLevel**.
 
-### Illegible Files
-If the uploaded documents are unreadable or too low quality for automated processing:
+The workflow then creates a **new opportunity** in the acquisition pipeline so that the submission is immediately visible to the operations team.
 
-- GHL task is assigned to **Lead Manager**
-- Status is set to **For Review**
+CRM data stored includes:
 
-### Incomplete Submission
-If required documents are missing:
+- contact details
+- property address
+- submission source
+- document links
+- validation results
 
-- Client receives an automated email requesting the missing files
-- GHL task status may be set to **Missing Documents**
+---
 
-### Qualified Submission
-If the documents are readable, complete, and the property meets acquisition criteria:
+### 3. Document Extraction and Validation
 
-- GHL task is assigned to **Acquisition Manager**
-- Status is set to **To Call**
-- Client receives a confirmation email:
+Uploaded documents are downloaded and sent to an **API-based document processing service** through the Make HTTP module.
 
-> Thanks for submitting your documents. Our real estate team is reviewing them at the moment and will give you a call within 2–3 business days.
+The system extracts relevant data such as:
 
-### Rejected or Escalated Property
-If the property fails acquisition criteria (for example property value below €200,000 or disallowed property types):
+- property type
+- year built
+- asking price
+- document readability
+- document completeness
 
-- the GHL task is either **rejected** automatically or
-- **escalated to management** for review
+The extracted information is normalized and stored as validation variables within the scenario.
 
-## Disclaimer
+---
 
-The workflow presented in this project is a **simulated reconstruction of production-style automation** originally developed for companies and clients under **Non-Disclosure Agreements (NDAs)**.
+### 4. Business Rule Validation
 
-To respect those agreements, the implementation shown here does **not reflect the exact production systems, infrastructure, datasets, or configurations** used in the original environments.
+The system evaluates the property against acquisition rules.
 
-Instead, the scenarios in this repository recreate the **same architectural concepts and automation logic** using publicly available tools, sandbox environments, and mock data. Certain business rules, integrations, and technical details may differ from the original implementations to ensure that no confidential or proprietary information is disclosed.
+Example validation rules include:
 
-These examples are intended strictly for **portfolio and demonstration purposes**.
+- Only **single-family homes** are accepted
+- **Condos and commercial properties** are rejected
+- Properties priced **above €200,000** are rejected
+- Certain historic construction periods trigger **government escalation review**
+- Submissions must include **complete and readable documents**
+
+These rules determine how the opportunity is routed inside the CRM pipeline.
+
+---
+
+# Automated Routing Outcomes
+
+After validation, the automation routes the opportunity into one of several CRM stages.
+
+### Missing Documents
+
+Triggered when required documents are not present.
+
+Actions:
+
+- Opportunity stage updated to **Missing Documents**
+- Missing files recorded in CRM notes
+- Follow-up communication handled by GHL automation
+
+---
+
+### Document Review Required
+
+Triggered when documents are unreadable or incomplete.
+
+Actions:
+
+- Opportunity stage updated to **For Review**
+- Internal notes added for lead manager
+- Manual verification required
+
+---
+
+### Property Rejected
+
+Triggered when the property fails acquisition criteria.
+
+Examples:
+
+- condo property type
+- commercial property type
+- price exceeds acquisition limit
+
+Actions:
+
+- Opportunity moved to **Rejected**
+- rejection reason stored in CRM
+
+---
+
+### Government Escalation
+
+Triggered when properties fall within specific historic construction periods that require special compliance handling.
+
+Actions:
+
+- Opportunity moved to **Government Escalation**
+- internal notification triggered
+
+---
+
+### Qualified Acquisition Lead
+
+Triggered when the submission passes all validation checks.
+
+Conditions:
+
+- documents complete
+- documents readable
+- single-family property
+- price within acquisition threshold
+
+Actions:
+
+- Opportunity moved to **To Call**
+- acquisition team notified
+- follow-up communication initiated
+
+---
+
+# System Architecture
+
+The automation is orchestrated using **Make.com** and structured around modular components.
+
+Main modules include:
+
+```
+Google Drive – Watch Files
+Google Drive – Resolve Submission Folder
+Google Drive – Retrieve Submission Files
+GoHighLevel – Create or Update Contact
+GoHighLevel – Create Opportunity
+HTTP – Document Extraction API
+HTTP – Validation Engine
+Tools – Normalize Validation Variables
+Router – Business Rule Routing
+GoHighLevel – Update Opportunity
+```
+
+All communications, notifications, and follow-up workflows are handled directly within **GoHighLevel automation sequences**.
+
+---
+
+# Technology Stack
+
+- Make.com
+- Google Drive
+- HTTP APIs for document processing
+- GoHighLevel CRM
+- AI-powered document validation services
+
+---
+
+# Design Principles
+
+This workflow was designed with the following goals:
+
+- eliminate manual document triage
+- enforce acquisition rules automatically
+- centralize lead management in the CRM
+- reduce operational bottlenecks
+- create a scalable property intake pipeline
+
+The system architecture ensures that only **validated acquisition opportunities reach the sales team**.
+
+---
+
+# Disclaimer
+
+This repository contains a **simulated reconstruction of automation workflows inspired by real-world implementations** that were originally developed for organizations under **Non-Disclosure Agreements (NDAs)**.
+
+To honor those agreements, the workflows, infrastructure, integrations, and datasets shown here differ from the original production environment.
+
+The purpose of this repository is to demonstrate **automation architecture, workflow design, and system integration concepts** using publicly available tools.
+
+All examples are provided strictly for **portfolio and educational purposes**.
