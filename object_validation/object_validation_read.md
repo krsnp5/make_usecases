@@ -10,6 +10,8 @@ The system reduces manual document review and ensures that only valid property o
 
 # System Overview
 
+Link: https://github.com/krsnp5/make_usecases/blob/main/object_validation/UC1_3_OV_Submissions.png
+
 The automation acts as an **intake and validation layer** between property sellers and the internal acquisition team.
 
 When a property owner submits documents, the system automatically:
