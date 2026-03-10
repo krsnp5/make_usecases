@@ -18,9 +18,11 @@ The workflow consisted of two core processes:
 
 **Use Case 1 – Inbound Ticket Translation**  
 Customer messages written in various languages were translated into German so that support agents could process all tickets using a single internal language.
+https://github.com/krsnp5/make_usecases/blob/main/multilingual/legacy_automation/LEG_UC1_Inbound_Translation.png
 
 **Use Case 2 – Outbound Ticket Translation**  
 Responses written by support agents in German were automatically translated back into the customer's original language before being sent.
+https://github.com/krsnp5/make_usecases/blob/main/multilingual/legacy_automation/LEG_UC2_Outbound_Translation.png
 
 Together, these workflows created a fully automated multilingual support pipeline.
 
