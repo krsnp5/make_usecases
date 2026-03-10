@@ -6,6 +6,19 @@ Each folder represents a **standalone automation scenario** with its own README 
 
 ---
 
+## Disclaimer
+
+All workflows included in this repository are **simulations or reconstructions** of real-world solutions. They are intended for **demonstration, educational, and portfolio purposes only**.
+
+Certain implementation details may differ from the original production systems due to:
+
+- NDA restrictions
+- proprietary infrastructure
+- client-specific configurations
+- security and credential management policies
+
+---
+
 ## About This Repository
 
 Many of the workflows represented here are **recreations of automations I previously built for companies and clients**. Because those projects were delivered under **Non-Disclosure Agreements (NDAs)**, I cannot share the original environments, datasets, credentials, or proprietary system configurations.
