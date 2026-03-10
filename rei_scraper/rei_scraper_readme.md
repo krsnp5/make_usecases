@@ -1,83 +1,242 @@
-# REI Listing Intake Automation
+# REI Listing Intake & Price Change Detection Automation
 
-This project demonstrates a Python-based workflow for extracting publicly available real estate listing information and integrating it with an automation pipeline for lead qualification and CRM tracking.
+## Overview
 
-The scraper collects listing data from ImmoScout24 and sends structured information to **Make.com**, where automation workflows apply qualification rules and create corresponding records in **GoHighLevel (GHL)**.
+This project demonstrates an automated workflow for ingesting real estate listing data, detecting listing price changes, and synchronizing updates with a CRM pipeline.
 
-The goal of the system is to assist real estate acquisition teams in identifying potential opportunities while ensuring that all outreach activity is tracked in a centralized CRM pipeline.
+The system combines a **Python-based scraper**, a **Make.com automation workflow**, and **GoHighLevel (GHL)** as the CRM layer.
+
+The automation performs the following tasks:
+
+- Collects listing data from a scraper
+- Prevents duplicate listings from entering the CRM
+- Monitors previously captured listings for price changes
+- Automatically updates CRM contacts and opportunities when listing prices change
+
+This architecture simulates how real estate acquisition teams track listing activity and maintain an up-to-date pipeline of potential deals.
 
 ---
 
-## System Overview
+# System Architecture
 
-The workflow combines a Python scraper with an automation layer built in Make.com.
+The workflow is divided into multiple components with clear responsibilities.
 
-The Python component extracts listing data and sends it to a Make webhook. The Make scenario then evaluates the listing against predefined acquisition criteria and records the opportunity in GoHighLevel.
+Render Cron Job
+↓
+Python Scraper
+↓
+POST → Make Webhook
+↓
+Listing Intake Automation
+↓
+Data Store (listing state memory)
+↓
+GoHighLevel CRM
+
 
 Responsibilities are separated across the system:
 
-- **Python** handles listing extraction and data preparation  
-- **Make.com** performs business rule evaluation and routing  
-- **GoHighLevel** manages contacts, opportunities, and acquisition pipeline tracking  
+| Component | Role |
+|--------|------|
+| Render | scheduled execution environment |
+| Python | listing data extraction |
+| Make.com | automation, routing, and change detection |
+| Data Store | listing state memory |
+| GoHighLevel | contact and opportunity tracking |
 
 ---
 
-## Extracted Listing Data
+# Automation Workflow
 
-The scraper collects key listing attributes such as:
+The Make scenario is responsible for ingesting listings, detecting duplicates, and identifying price changes.
 
-- listing title  
+## 1. Listing Intake
+
+The scraper sends listing data to a Make webhook.
+
+Example payload:
+
+```json
+{
+  "source_platform": "immoscout24",
+  "listing_id": "12345",
+  "listing_title": "Detached house with garden",
+  "listing_url": "https://example.com/listing/12345",
+  "price_numeric": 120000,
+  "property_type": "single_family",
+  "city": "Leipzig"
+}
+```
+
+## 2. Listing Deduplication
+
+The automation checks a Make Data Store to determine whether the listing has already been processed.
+
+A unique key is generated for each listing:
+
+```json
+
+dedupe_key = source_platform + "_" + listing_id
+
+```
+
+If the listing has not been seen before:
+
+- it is stored in the listing memory
+- a contact is created in GoHighLevel
+- an opportunity is created in the acquisition pipeline
+
+## 3. Listing State Tracking
+
+Previously processed listings are stored in a Make Data Store to allow the automation to track listing state across multiple scraper runs.
+
+Stored attributes include:
+
+- dedupe_key
+- listing_url
+- current_price
+- property_type
+- city
+- source_platform
+- last_seen
+
+This allows the system to compare new scraper results with previously recorded listing data.
+
+---
+
+## 4. Price Change Detection
+
+If an existing listing reappears in the scraper output, the automation compares the incoming price with the stored price.
+
+Condition used in the automation:
+
+```json
+
+incoming_price != stored_price
+
+```
+
+If the price has changed:
+
+1. the stored record is updated  
+2. the CRM contact is updated  
+3. the CRM opportunity is updated  
+
+This ensures that the CRM always reflects the latest listing price without creating duplicate leads.
+
+---
+
+# CRM Synchronization
+
+The automation maintains synchronization with GoHighLevel by updating both contacts and opportunities.
+
+## Contact Updates
+
+Fields may include:
+
 - listing URL  
-- asking price  
-- property location (when available)  
-- property type (when available)  
-- source platform  
+- property type  
+- city  
+- current asking price  
+- last detected price change  
 
-These attributes are sent to a Make webhook where the automation scenario processes the listing and determines the appropriate CRM action.
+## Opportunity Updates
 
----
+The opportunity represents the potential acquisition lead.
 
-## CRM Integration
+Updates include:
 
-Once listing data reaches the Make automation scenario, the workflow performs the following steps:
-
-1. Apply acquisition qualification rules  
-2. Check for duplicate listings in the CRM  
-3. Create or update a **GoHighLevel contact**  
-4. Create a corresponding **GoHighLevel opportunity**
-
-Each outreach event associated with a listing creates a matching opportunity record in GoHighLevel so that acquisition teams can track communication and deal progress within the CRM pipeline.
+- opportunity value (asking price)  
+- updated listing data  
+- optional pipeline stage changes  
 
 ---
 
-## Example Qualification Rules
+# Data Store Design
 
-Listings may be filtered using business rules such as:
+The automation uses a Make Data Store to maintain listing state.
 
-- single-family homes only  
-- no condos  
-- no commercial properties  
-- minimum property value thresholds  
-- acceptable geographic regions  
+Example structure:
 
-These rules are evaluated within the Make automation layer before opportunities are created.
+| Field | Description |
+|------|-------------|
+| dedupe_key | unique listing identifier |
+| listing_url | original listing link |
+| price | latest known listing price |
+| city | property location |
+| source_platform | listing source |
+| last_seen | timestamp of last scrape |
+
+This memory layer enables both **deduplication** and **price change detection**.
 
 ---
 
-## Technologies Used
+# Scenario Logic
+
+The Make automation follows this logical flow:
+
+Webhook Trigger
+↓
+Normalize listing data
+↓
+Check Data Store for existing record
+↓
+Router
+├─ New Listing
+│ ↓
+│ Store listing
+│ ↓
+│ Create CRM contact
+│ ↓
+│ Create CRM opportunity
+│
+└─ Existing Listing
+↓
+Check for price change
+├─ No change → end
+└─ Price changed
+↓
+Update stored listing
+↓
+Update CRM contact
+↓
+Update CRM opportunity
+
+
+---
+
+# Technologies Used
 
 - Python  
 - Requests  
 - BeautifulSoup  
+- Render (Cron Jobs)  
 - Make.com  
 - GoHighLevel CRM  
 
 ---
 
-## Disclaimer
+# Key Automation Patterns Demonstrated
 
-This project represents a **simulated reconstruction of automation workflows inspired by real-world implementations** that were originally developed for companies under **Non-Disclosure Agreements (NDAs)**.
+This project demonstrates several automation and data engineering patterns:
 
-To honor those agreements, the code and workflows presented here do **not replicate the exact production systems, integrations, datasets, or infrastructure** used in the original environments. Instead, the project demonstrates the general automation architecture and technical concepts using publicly available tools and simplified logic.
+- webhook-based ingestion  
+- stateful data processing  
+- deduplication pipelines  
+- change detection workflows  
+- CRM synchronization  
+- event-driven automation  
+
+These patterns are commonly used in real-world automation systems, lead ingestion pipelines, and property acquisition tools.
+
+---
+
+# Disclaimer
+
+This project represents a **simulated reconstruction of automation workflows inspired by real-world implementations** developed for companies under **Non-Disclosure Agreements (NDAs)**.
+
+To honor those agreements, the code and workflows presented here do **not replicate the exact production systems, integrations, datasets, or infrastructure** used in the original environments.
+
+Instead, the project demonstrates the **automation architecture and technical concepts** using publicly available tools and simplified logic.
 
 All examples in this repository are intended solely for **portfolio and educational purposes**.
