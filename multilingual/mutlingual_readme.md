@@ -25,6 +25,8 @@ When a new customer message is received, the system automatically sends an ackno
 3. Use Case 3: Outbound Response Translation 
 Scenario: https://github.com/krsnp5/make_usecases/blob/main/multilingual/UC3_Outbound_Message_Translation.png
 
+As this automation was recreated for 2026 make, visit the legacy automation to see how the infrastructure was done prior to adding Zammad module in Make: https://github.com/krsnp5/make_usecases/tree/main/multilingual/legacy_automation
+
 ## Disclaimer
 
 The workflow presented in this project is a **simulated reconstruction of production-style automation** originally developed for companies and clients under **Non-Disclosure Agreements (NDAs)**.
