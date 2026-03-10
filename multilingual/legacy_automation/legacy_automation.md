@@ -1,95 +1,95 @@
-# Legacy Multilingual Ticket Translation Automation (2025)
-## Use Case 2 — Outbound Ticket Translation
+# Legacy Multilingual Customer Support Automation (2025)
 
-This document describes the legacy automation workflow used to translate **outbound support replies** before a native integration between Zammad and Make.com was available.
+This project documents a legacy multilingual customer support automation workflow implemented in 2025 before a native integration for Zammad became available in Make.com.
 
-The automation ensured that support agents could respond in **German**, while customers received replies in their **original language**.
+The system enabled a German-speaking support team to communicate with customers who submitted support requests in different languages. Incoming messages were automatically translated into German for internal use, and agent responses were translated back into the customer's original language before being delivered.
 
-At the time this workflow was implemented, Zammad did not have a native Make.com integration, so all interactions with the helpdesk system were handled through **Zammad's REST API using the HTTP module**.
+Because Zammad did not yet have a native integration in Make.com at the time, most automation logic—including translation, ticket processing, tagging, categorization, and logging—was implemented directly inside Make using webhooks and API calls.
 
----
-
-## Workflow Objective
-
-The purpose of this automation was to automatically translate support agent replies into the customer's original language before the message was delivered to the customer.
-
-This allowed the support team to operate entirely in German while still providing multilingual support to customers across different regions.
+All interactions with Zammad were handled through the **Zammad REST API via the HTTP module**.
 
 ---
 
 ## System Overview
 
-When a support agent replied to a ticket, the automation performed the following steps:
+The automation served as a translation and classification layer between customer messages and the internal support team.
+
+The workflow consisted of two core processes:
+
+**Use Case 1 – Inbound Ticket Translation**  
+Customer messages written in various languages were translated into German so that support agents could process all tickets using a single internal language.
+
+**Use Case 2 – Outbound Ticket Translation**  
+Responses written by support agents in German were automatically translated back into the customer's original language before being sent.
+
+Together, these workflows created a fully automated multilingual support pipeline.
+
+---
+
+## Use Case 1 – Inbound Ticket Translation
+
+When a new support ticket was created, the automation performed the following steps:
+
+1. Receive ticket data via webhook  
+2. Detect the language of the incoming message  
+3. Translate the message into German  
+4. Add a language tag to the ticket  
+5. Categorize the ticket using business rules  
+6. Log translation activity for monitoring and reporting  
+
+This allowed support agents to view both the **original message and the translated German version** within the same ticket.
+
+### Anti-Loop Protection
+
+An anti-loop safeguard prevented the automation from repeatedly triggering itself when ticket updates were written back into Zammad.
+
+This ensured that translated comments or tags did not cause recursive automation runs.
+
+### Ticket Categorization
+
+The automation applied business rules to classify the ticket and assign appropriate category tags.
+
+Depending on the evaluation, the system could:
+
+- assign a single category  
+- assign multiple categories  
+- trigger rule-based tagging  
+
+These categories were applied to the ticket through Zammad API calls.
+
+---
+
+## Use Case 2 – Outbound Ticket Translation
+
+When a support agent responded to a ticket, the automation ensured that the reply was translated back into the customer's original language.
+
+The workflow performed the following actions:
 
 1. Receive ticket update via webhook  
-2. Retrieve ticket metadata and language tags  
+2. Retrieve ticket language tags  
 3. Identify the customer's original language  
 4. Extract the reply message content  
-5. Translate the reply into the customer's language  
-6. Add the translated response back to the ticket as a comment  
-7. Log the interaction for monitoring and reporting  
+5. Translate the reply from German to the customer's language  
+6. Add the translated response back into the ticket as a comment  
+7. Log the translation activity  
+
+This ensured that customers always received replies in their native language while agents continued working entirely in German.
 
 ---
 
-## Workflow Breakdown
+## Logging and Monitoring
 
-### Ticket Update Trigger
+Automation activity was logged to Google Sheets for operational visibility and auditing.
 
-A webhook triggered the workflow whenever a ticket was updated in Zammad.
-
-This allowed the automation to detect when an agent posted a new reply.
-
----
-
-### Ticket Metadata Retrieval
-
-The automation retrieved the ticket's language tag using the **Zammad REST API** through the HTTP module.
-
-The language tag indicated which language the response should be translated into.
-
----
-
-### Language Extraction
-
-The system extracted the language identifier from the ticket tags to determine the correct translation target.
-
-This ensured that replies were translated back into the customer's original language.
-
----
-
-### Message Parsing
-
-The ticket response text was extracted from the ticket payload using a text parser module.
-
-This step isolated the message content written by the support agent.
-
----
-
-### Translation Processing
-
-The extracted message was sent to the translation pipeline, which used AI translation services to convert the German response into the customer's language.
-
----
-
-### Ticket Comment Update
-
-The translated message was added back to the ticket using the **Zammad API via the HTTP module**, ensuring the customer received the translated response within the same support thread.
-
----
-
-### Data Logging
-
-The workflow recorded activity in Google Sheets to maintain an audit trail of translation operations.
-
-The log included:
+Logs recorded information such as:
 
 - ticket ID  
-- agent identifier  
 - detected language  
-- translated message  
-- timestamp  
+- translation output  
+- agent identifier  
+- processing timestamp  
 
-Separate logs were maintained for both **agent responses** and **customer replies**.
+This allowed the team to monitor translation performance and automation activity.
 
 ---
 
@@ -100,13 +100,15 @@ Separate logs were maintained for both **agent responses** and **customer replie
 - Zammad REST API (via HTTP module)  
 - Google Sheets (logging and monitoring)
 
+Because Zammad was not yet available as a native Make.com application at the time, most workflow orchestration and ticket-processing logic had to be implemented directly inside Make.
+
 ---
 
 ## Legacy Implementation Notes
 
-This automation represents the **outbound translation layer** of the multilingual support system. It worked in conjunction with the inbound translation workflow to create a fully automated multilingual support pipeline.
+This automation represents an early implementation of a multilingual support system built using APIs and automation tools when direct platform integrations were not yet available.
 
-The legacy system demonstrates how complex integrations can be built using APIs and automation platforms even when native integrations are not yet available.
+The workflow demonstrates how helpdesk platforms can still be integrated into automation systems using webhooks and API calls.
 
 ---
 
