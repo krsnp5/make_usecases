@@ -66,19 +66,6 @@ Examples in this repository may include integrations with:
 
 ---
 
-## Disclaimer
-
-All workflows included in this repository are **simulations or reconstructions** of real-world solutions. They are intended for **demonstration, educational, and portfolio purposes only**.
-
-Certain implementation details may differ from the original production systems due to:
-
-- NDA restrictions
-- proprietary infrastructure
-- client-specific configurations
-- security and credential management policies
-
----
-
 ## Purpose
 
 The goal of this repository is to demonstrate:
